@@ -4,17 +4,38 @@ services:
   fastapi:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.backend
     container_name: fastapi
+    restart: always
     ports:
       - "8000:8000"
 
+  gradio:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: gradio
+    restart: always
+    command: ["python", "gradio_server.py"]
+    ports:
+      - "7860:7860"
+      - "7861:7861"
+      - "7862:7862"
+    environment:
+      - GRADIO_PORT_EN=7860
+      - GRADIO_PORT_JP=7861
+      - GRADIO_PORT_KR=7862
+
   nginx:
-    image: nginx:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
     container_name: nginx
+    restart: always
     ports:
       - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - fastapi
+      - gradio
