@@ -8,7 +8,7 @@ from backend.gradio_japanese import demo_jp
 from backend.gradio_korean import demo_kr
 
 app = FastAPI()
-
+app.mount("/static", StaticFiles(directory="../client/assets"), name="static")
 @app.get("/")
 def read_root():
     return {"message": "Hello, This is the main app!"}
