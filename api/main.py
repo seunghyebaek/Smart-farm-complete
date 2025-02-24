@@ -1,5 +1,5 @@
-import os
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 import gradio as gr
 
 # Gradio 페이지 import
@@ -13,8 +13,19 @@ app = FastAPI()
 def read_root():
     return {"message": "Hello, This is the main app!"}
 
-# Gradio 앱들을 개별 FastAPI 인스턴스로 마운트
-app.mount("/korean", gr.mount_gradio_app(FastAPI(), demo_kr, path=""))
-app.mount("/japanese", gr.mount_gradio_app(FastAPI(), demo_jp, path=""))
-app.mount("/english", gr.mount_gradio_app(FastAPI(), demo_en, path=""))
+@app.get("/")
+def read_root():
+    return {"message": "Hello, This is the main app!"}
 
+# Gradio 앱 마운트
+@app.get("/korean")
+async def korean():
+    return gr.mount_gradio_app(app, demo_kr, path="/korean")
+
+@app.get("/japanese")
+async def japanese():
+    return gr.mount_gradio_app(app, demo_jp, path="/japanese")
+
+@app.get("/english")
+async def english():
+    return gr.mount_gradio_app(app, demo_en, path="/english")

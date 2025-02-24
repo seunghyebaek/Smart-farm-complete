@@ -7,16 +7,24 @@
     {
       "src": "client/index.html",
       "use": "@vercel/static"
+    },
+    {
+      "src": "client/assets/*",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/(.*)",
-      "dest": "client/index.html"
-    },
-    {
       "src": "/api/(.*)",
       "dest": "api/main.py"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "client/assets/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "client/index.html"
     }
   ]
 }
