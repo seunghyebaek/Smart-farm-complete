@@ -1,0 +1,24 @@
+name: Build and Deploy FastAPI to Docker Hub
+
+on:
+  push:
+    branches:
+      - main  # main 브랜치에 push할 때 실행
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+    
+    - name: Build and Push Docker Image to Docker Hub
+      run: |
+        docker build -t rmseldy0509/smart-farm-web:latest .
+        docker tag rmseldy0509/smart-farm-web:latest rmseldy0509/smart-farm-web:v1
+        docker push rmseldy0509/smart-farm-web:latest
+        docker push rmseldy0509/smart-farm-web:v1
