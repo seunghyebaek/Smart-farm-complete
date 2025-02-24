@@ -2,17 +2,11 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 import gradio as gr
 
-# Gradio 페이지 import
-from backend.gradio_english import demo_en
-from backend.gradio_japanese import demo_jp
-from backend.gradio_korean import demo_kr
-
+# FastAPI 앱 생성
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="../client/assets"), name="static")
 
-@app.get("/")
-def read_root():
-    return {"message": "Hello, This is the main app!"}
+# 정적 파일 제공 (client/assets 폴더 내 파일을 `/static/` 경로에서 제공)
+app.mount("/static", StaticFiles(directory="../client/assets"), name="static")
 
 @app.get("/")
 def read_root():
